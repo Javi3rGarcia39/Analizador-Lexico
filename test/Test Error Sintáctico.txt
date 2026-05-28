@@ -1,0 +1,3 @@
+iniciar_juego iniciar_bloque
+vida vida asignar 100 fin
+finalizar_bloque

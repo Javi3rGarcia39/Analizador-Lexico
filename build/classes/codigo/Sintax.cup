@@ -1,0 +1,124 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+    }
+:};
+
+/* TERMINALES */
+terminal 
+    Linea, Comillas, T_dato, Cadena,
+    If, Else, Do, While, For,
+    Igual, Suma, Resta, Multiplicacion, Division,
+    Op_logico, Op_relacional,
+    Op_atribucion, Op_incremento, Op_booleano,
+    Parentesis_a, Parentesis_c,
+    Llave_a, Llave_c,
+    Corchete_a, Corchete_c,
+    Main, P_coma,
+    Identificador, Numero, ERROR,
+    Entidad,
+    Accion,
+    Evento,
+    Imprimir;
+
+/* NO TERMINALES */
+non terminal 
+    INICIO, SENTENCIA, DECLARACION,
+    IF, IF_ELSE, WHILE, DO_WHILE, FOR,
+    SENTENCIA_BOOLEANA, SENTENCIA_ACCION;
+
+/* INICIAL */
+start with INICIO;
+
+/* PROGRAMA */
+INICIO ::= 
+    Main Llave_a SENTENCIA Llave_c
+;
+
+/* SENTENCIAS */
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF |
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE |
+    WHILE |
+    SENTENCIA DO_WHILE |
+    DO_WHILE |
+    SENTENCIA FOR |
+    FOR |
+    SENTENCIA SENTENCIA_ACCION |
+    SENTENCIA_ACCION
+;
+
+/* DECLARACIONES */
+DECLARACION ::= 
+    T_dato Identificador P_coma |
+    T_dato Identificador Igual Numero P_coma |
+    T_dato Identificador Op_atribucion Numero P_coma |
+    T_dato Identificador Op_incremento P_coma |
+    T_dato Op_incremento Identificador P_coma
+;
+
+SENTENCIA_ACCION ::=
+    Accion Identificador P_coma |
+    Imprimir Comillas Identificador Comillas P_coma |
+    Imprimir Comillas Comillas P_coma |
+    Op_incremento Identificador P_coma |
+    Op_atribucion Identificador Numero P_coma |
+    Suma Numero Numero P_coma |
+    Resta Numero Numero P_coma |
+    Multiplicacion Numero Numero P_coma |
+    Division Numero Numero P_coma
+;
+
+/* IF */
+IF ::= 
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c 
+    Llave_a SENTENCIA Llave_c
+;
+
+/* IF ELSE */
+IF_ELSE ::= 
+    If Parentesis_a SENTENCIA_BOOLEANA Parentesis_c 
+    Llave_a SENTENCIA Llave_c 
+    Else Llave_a SENTENCIA Llave_c
+;
+
+/* WHILE */
+WHILE ::= 
+    While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c 
+    Llave_a SENTENCIA Llave_c
+;
+
+/* DO WHILE */
+DO_WHILE ::= 
+    Do Llave_a SENTENCIA Llave_c 
+    While Parentesis_a SENTENCIA_BOOLEANA Parentesis_c P_coma
+;
+
+/* FOR */
+FOR ::= 
+    For Parentesis_a SENTENCIA_BOOLEANA Parentesis_c 
+    Llave_a SENTENCIA Llave_c
+;
+
+/* CONDICIONES */
+SENTENCIA_BOOLEANA ::= 
+    Op_booleano |
+    Identificador Op_relacional Numero |
+    Identificador Op_relacional Identificador
+;
