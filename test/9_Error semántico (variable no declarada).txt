@@ -1,0 +1,4 @@
+iniciar_juego iniciar_bloque
+vida salud asignar 10 fin
+reducir mp fin
+finalizar_bloque

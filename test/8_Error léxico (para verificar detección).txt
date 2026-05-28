@@ -1,3 +1,4 @@
 iniciar_juego iniciar_bloque
-vida vida asignar 100 fin
+vida salud asignar 10 fin
+@ esto falla fin
 finalizar_bloque

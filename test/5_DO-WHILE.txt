@@ -1,0 +1,8 @@
+iniciar_juego iniciar_bloque
+vida nivel asignar 1 fin
+repetir iniciar_bloque
+mostrar ' nivel ' fin
+aumentar nivel fin
+finalizar_bloque
+mientras_jugando abrir_mision nivel menor 4 cerrar_mision fin
+finalizar_bloque

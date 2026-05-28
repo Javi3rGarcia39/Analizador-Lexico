@@ -61,10 +61,10 @@ espacio=[ \t\r\n]+
 (sumar|restar) { return new Symbol(sym.Op_atribucion, yyline, yycolumn, yytext()); }
 
 /* Operadores aritmeticos */
-(mas)   { return new Symbol(sym.Suma,           yyline, yycolumn, yytext()); }
-(menos) { return new Symbol(sym.Resta,          yyline, yycolumn, yytext()); }
-(por)   { return new Symbol(sym.Multiplicacion, yyline, yycolumn, yytext()); }
-(entre) { return new Symbol(sym.Division,       yyline, yycolumn, yytext()); }
+"mas"   { return new Symbol(sym.Suma,           yyline, yycolumn, yytext()); }
+"menos" { return new Symbol(sym.Resta,          yyline, yycolumn, yytext()); }
+"por"   { return new Symbol(sym.Multiplicacion, yyline, yycolumn, yytext()); }
+"entre" { return new Symbol(sym.Division,       yyline, yycolumn, yytext()); }
 
 /* Mostrar */
 (mostrar) { return new Symbol(sym.Imprimir, yyline, yycolumn, yytext()); }

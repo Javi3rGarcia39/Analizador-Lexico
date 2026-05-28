@@ -1,0 +1,8 @@
+iniciar_juego iniciar_bloque
+vida a asignar 10 fin
+vida b asignar 5 fin
+mas a b fin
+menos a b fin
+por a b fin
+entre a b fin
+finalizar_bloque

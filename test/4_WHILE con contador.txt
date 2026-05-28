@@ -1,0 +1,7 @@
+iniciar_juego iniciar_bloque
+vida contador asignar 5 fin
+mientras_jugando abrir_mision contador mayor 0 cerrar_mision iniciar_bloque
+mostrar ' contador ' fin
+reducir contador fin
+finalizar_bloque
+finalizar_bloque

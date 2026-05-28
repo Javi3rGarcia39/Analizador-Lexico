@@ -1,0 +1,7 @@
+iniciar_juego iniciar_bloque
+vida i asignar 3 fin
+subir_nivel abrir_mision i mayor 0 cerrar_mision iniciar_bloque
+mostrar ' i ' fin
+reducir i fin
+finalizar_bloque
+finalizar_bloque

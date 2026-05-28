@@ -80,9 +80,21 @@ SENTENCIA_ACCION ::=
     Op_incremento Identificador P_coma |
     Op_atribucion Identificador Numero P_coma |
     Suma Numero Numero P_coma |
+    Suma Identificador Numero P_coma |
+    Suma Numero Identificador P_coma |
+    Suma Identificador Identificador P_coma |
     Resta Numero Numero P_coma |
+    Resta Identificador Numero P_coma |
+    Resta Numero Identificador P_coma |
+    Resta Identificador Identificador P_coma |
     Multiplicacion Numero Numero P_coma |
-    Division Numero Numero P_coma
+    Multiplicacion Identificador Numero P_coma |
+    Multiplicacion Numero Identificador P_coma |
+    Multiplicacion Identificador Identificador P_coma |
+    Division Numero Numero P_coma |
+    Division Identificador Numero P_coma |
+    Division Numero Identificador P_coma |
+    Division Identificador Identificador P_coma
 ;
 
 /* IF */

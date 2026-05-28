@@ -1,9 +1,0 @@
-iniciar_juego iniciar_bloque
-vida salud fin
-mision abrir_mision salud mayor 100 cerrar_mision iniciar_bloque
-mostrar ' vivo ' fin
-finalizar_bloque
-sino iniciar_bloque
-mostrar ' muerto ' fin
-finalizar_bloque
-finalizar_bloque

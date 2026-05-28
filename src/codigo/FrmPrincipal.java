@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,7 @@ import javax.swing.border.TitledBorder;
 public class FrmPrincipal extends javax.swing.JFrame {
 
     // -----------------------------------------------------------------------
-    // Colores modo oscuro
+    // Colores
     // -----------------------------------------------------------------------
     private static final Color D_BG = new Color(28, 28, 36);
     private static final Color D_PANEL = new Color(36, 36, 48);
@@ -26,22 +27,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private static final Color D_LEX_OUT = new Color(20, 40, 55);
     private static final Color D_SIN_OUT = new Color(32, 32, 44);
     private static final Color D_SAL_OUT = new Color(36, 36, 28);
+    private static final Color D_COD_OUT = new Color(28, 38, 52);
     private static final Color D_BTN = new Color(50, 50, 70);
     private static final Color D_FG = new Color(210, 215, 225);
     private static final Color D_TITLE = new Color(100, 180, 255);
     private static final Color D_BORDER = new Color(60, 60, 90);
 
-    // Colores modo claro (originales)
-    private static final Color L_BG = new Color(240, 240, 240);
     private static final Color L_PANEL = Color.WHITE;
     private static final Color L_INPUT = new Color(204, 255, 255);
     private static final Color L_LEX_OUT = new Color(153, 255, 255);
     private static final Color L_SIN_OUT = new Color(204, 204, 204);
     private static final Color L_SAL_OUT = new Color(255, 255, 230);
-    private static final Color L_BTN = new Color(220, 220, 220);
-    private static final Color L_FG = Color.BLACK;
-    private static final Color L_TITLE = Color.BLACK;
-    private static final Color L_BORDER = Color.GRAY;
+    private static final Color L_COD_OUT = new Color(230, 240, 255);
 
     private boolean modoOscuro = false;
 
@@ -56,23 +53,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // Tema
     // -----------------------------------------------------------------------
     private void aplicarTema() {
-        Color bg = modoOscuro ? D_BG : L_BG;
+        Color bg = modoOscuro ? D_BG : new Color(240, 240, 240);
         Color panel = modoOscuro ? D_PANEL : L_PANEL;
         Color input = modoOscuro ? D_INPUT : L_INPUT;
         Color lexOut = modoOscuro ? D_LEX_OUT : L_LEX_OUT;
         Color sinOut = modoOscuro ? D_SIN_OUT : L_SIN_OUT;
         Color salOut = modoOscuro ? D_SAL_OUT : L_SAL_OUT;
-        Color btn = modoOscuro ? D_BTN : L_BTN;
-        Color fg = modoOscuro ? D_FG : L_FG;
-        Color title = modoOscuro ? D_TITLE : L_TITLE;
-        Color border = modoOscuro ? D_BORDER : L_BORDER;
+        Color codOut = modoOscuro ? D_COD_OUT : L_COD_OUT;
+        Color btn = modoOscuro ? D_BTN : new Color(220, 220, 220);
+        Color fg = modoOscuro ? D_FG : Color.BLACK;
+        Color title = modoOscuro ? D_TITLE : Color.BLACK;
+        Color border = modoOscuro ? D_BORDER : Color.GRAY;
 
         getContentPane().setBackground(bg);
         panelCentral.setBackground(bg);
 
-        // Panel 1
         jPanel1.setBackground(panel);
-        setBorder(jPanel1, "Analizador Lexico", title, border);
+        setBorde(jPanel1, "Analizador Lexico", title, border);
         txtResultado.setBackground(input);
         txtResultado.setForeground(fg);
         txtResultado.setCaretColor(fg);
@@ -81,46 +78,43 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jScrollPane1.getViewport().setBackground(input);
         jScrollPane2.getViewport().setBackground(lexOut);
 
-        // Panel 2
         jPanel2.setBackground(panel);
-        setBorder(jPanel2, "Analizador Sintactico", title, border);
+        setBorde(jPanel2, "Analizador Sintactico", title, border);
         txtAnalizarSin.setBackground(sinOut);
         jScrollPane3.getViewport().setBackground(sinOut);
 
-        // Panel 3
         jPanel3.setBackground(panel);
-        setBorder(jPanel3, "Resultado de Ejecucion", title, border);
+        setBorde(jPanel3, "Resultado de Ejecucion", title, border);
         txtSalida.setBackground(salOut);
         txtSalida.setForeground(fg);
         jScrollPane4.getViewport().setBackground(salOut);
 
-        // Botones
-        estilizarBtn(btnArchivo, btn, fg);
-        estilizarBtn(btnAnalizarLex, btn, fg);
-        estilizarBtn(btnLimpiarLex, btn, fg);
-        estilizarBtn(btnAnalizarSin, btn, fg);
-        estilizarBtn(btnLimpiarSin, btn, fg);
-        estilizarBtn(btnLimpiarSalida, btn, fg);
-        estilizarBtn(btnTema, btn, fg);
-        btnTema.setText(modoOscuro ? "Modo Claro" : "Modo Oscuro");
+        jPanel4.setBackground(panel);
+        setBorde(jPanel4, "Codigo Intermedio", title, border);
+        txtCodigo.setBackground(codOut);
+        txtCodigo.setForeground(fg);
+        jScrollPane5.getViewport().setBackground(codOut);
 
+        for (javax.swing.JButton b : new javax.swing.JButton[]{
+            btnArchivo, btnAnalizarLex, btnLimpiarLex,
+            btnAnalizarSin, btnLimpiarSin, btnLimpiarSalida,
+            btnGenerarCodigo, btnLimpiarCodigo, btnTema}) {
+            b.setBackground(btn);
+            b.setForeground(fg);
+            b.setOpaque(true);
+            b.setBorderPainted(false);
+            b.setFocusPainted(false);
+        }
+        btnTema.setText(modoOscuro ? "Modo Claro" : "Modo Oscuro");
         repaint();
         revalidate();
     }
 
-    private void setBorder(javax.swing.JPanel p, String titulo, Color fg, Color linea) {
+    private void setBorde(javax.swing.JPanel p, String t, Color fg, Color linea) {
         p.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(linea, 1),
-                titulo, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION,
+                BorderFactory.createLineBorder(linea, 1), t,
+                TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION,
                 new Font("Tahoma", Font.PLAIN, 18), fg));
-    }
-
-    private void estilizarBtn(javax.swing.JButton b, Color bg, Color fg) {
-        b.setBackground(bg);
-        b.setForeground(fg);
-        b.setOpaque(true);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
     }
 
     // -----------------------------------------------------------------------
@@ -129,8 +123,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void analizarLexico() throws IOException {
         String expr = txtResultado.getText();
         LexerCup lexer = new LexerCup(new StringReader(expr));
-        // Encabezado con formato fijo — columna LINEA de 10 chars, SIMBOLO alineado
-        StringBuilder resultado = new StringBuilder(String.format("%-25s %s%n", "LINEA", "SIMBOLO"));
+        StringBuilder resultado = new StringBuilder(String.format("%-7s\t%-8s\t%-20s\t%s\n", "LINEA", "COLUMNA", "SIMBOLO", "LEXEMA"));
+        resultado.append("-".repeat(75)).append("\n");
 
         while (true) {
             Symbol token = lexer.next_token();
@@ -139,6 +133,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 return;
             }
             String lex = (token.value != null) ? token.value.toString() : "";
+            int linea = token.left + 1;
+            int columna = token.right + 1;
+
             String tipo;
             switch (token.sym) {
                 case sym.Main:
@@ -186,17 +183,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 case sym.Op_booleano:
                     tipo = "<Op booleano>";
                     break;
-                case sym.Op_incremento:
-                    tipo = "<Incremento>";
-                    break;
-                case sym.Op_atribucion:
-                    tipo = "<Atribucion (" + lex + ")>";
-                    break;
                 case sym.Parentesis_a:
                     tipo = "<Inicio condicion>";
                     break;
                 case sym.Parentesis_c:
                     tipo = "<Fin condicion>";
+                    break;
+                case sym.Op_incremento:
+                    tipo = "<Op incremento>";
+                    break;
+                case sym.Op_atribucion:
+                    tipo = "<Op atribucion>";
                     break;
                 case sym.Imprimir:
                     tipo = "<Mostrar>";
@@ -206,9 +203,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     break;
                 case sym.Comillas:
                     tipo = "<Comillas>";
-                    break;
-                case sym.ERROR:
-                    tipo = "<ERROR LEXICO>";
                     break;
                 case sym.Suma:
                     tipo = "<Suma>";
@@ -222,15 +216,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 case sym.Division:
                     tipo = "<Division>";
                     break;
+                case sym.ERROR:
+                    tipo = "<ERROR LEXICO>";
+                    break;
                 default:
-                    tipo = "<" + lex + ">";
-                    lex = "";
+                    tipo = "<Desconocido>";
                     break;
             }
-            resultado.append(String.format("  %-23s %s%n", tipo, lex));
+            resultado.append(String.format("%-7d\t%-8d\t%-20s\t%s\n", linea, columna, tipo, lex));
         }
     }
 
+    // -----------------------------------------------------------------------
+    // Verificacion lexica previa
+    // -----------------------------------------------------------------------
     private String verificarLexico(String fuente) throws Exception {
         LexerCup lexer = new LexerCup(new StringReader(fuente));
         while (true) {
@@ -251,11 +250,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // -----------------------------------------------------------------------
-    // Analisis sintactico + interpretacion
+    // Analisis sintactico + semantico + interpretacion
     // -----------------------------------------------------------------------
     private void analizarSintactico() {
         String ST = txtResultado.getText();
 
+        // 1. Verificar lexico
         try {
             String errorLexico = verificarLexico(ST);
             if (errorLexico != null) {
@@ -271,31 +271,106 @@ public class FrmPrincipal extends javax.swing.JFrame {
             return;
         }
 
-// Verificar lexico primero
+        // 2. Verificar sintaxis
+        Sintax s = new Sintax(new LexerCup(new StringReader(ST)));
         try {
-            LexerCup lexerCheck = new LexerCup(new StringReader(ST));
-            while (true) {
-                Symbol tokCheck = lexerCheck.next_token();
-                if (tokCheck.sym == sym.EOF) {
-                    break;
-                }
-                if (tokCheck.sym == sym.ERROR) {
-                    int linea = tokCheck.left + 1;
-                    int columna = tokCheck.right + 1;
-                    String lex = tokCheck.value != null ? tokCheck.value.toString() : "?";
-                    String msg = "Error LEXICO en linea " + linea
-                            + ", columna " + columna
-                            + ". Simbolo no reconocido: \"" + lex + "\"";
-                    txtAnalizarSin.setForeground(new Color(200, 80, 0));
-                    txtAnalizarSin.setText(msg);
-                    txtSalida.setForeground(new Color(200, 80, 0));
-                    txtSalida.setText("No se puede ejecutar: hay errores lexicos.\n\n" + msg);
-                    return;
-                }
+            s.parse();
+        } catch (Exception ex) {
+            Symbol err = s.getS();
+            String msg;
+            if (err != null) {
+                int linea = err.left + 1;
+                int columna = err.right + 1;
+                String lex = err.value != null ? err.value.toString() : "?";
+                msg = "Error SINTACTICO en linea " + linea
+                        + ", columna " + columna
+                        + ". Token inesperado: \"" + lex + "\"";
+            } else {
+                msg = "Error SINTACTICO desconocido.";
+            }
+            txtAnalizarSin.setForeground(Color.RED);
+            txtAnalizarSin.setText(msg);
+            txtSalida.setForeground(Color.RED);
+            txtSalida.setText("No se puede ejecutar: hay errores sintacticos.\n\n" + msg);
+            return;
+        }
+
+        txtAnalizarSin.setForeground(new Color(25, 111, 61));
+        txtAnalizarSin.setText("Analisis sintactico correcto.");
+
+        // 3. Analisis semantico
+        List<AnalizadorSemantico.ErrorSemantico> erroresSemanticos;
+        try {
+            erroresSemanticos = AnalizadorSemantico.analizar(ST);
+        } catch (Exception ex) {
+            txtSalida.setForeground(Color.RED);
+            txtSalida.setText("Error al analizar semantica: " + ex.getMessage());
+            return;
+        }
+        if (!erroresSemanticos.isEmpty()) {
+            StringBuilder sb = new StringBuilder("Errores semanticos encontrados:\n");
+            for (AnalizadorSemantico.ErrorSemantico e : erroresSemanticos) {
+                sb.append("  - ").append(e).append("\n");
+            }
+            txtAnalizarSin.setForeground(new Color(120, 0, 180));
+            txtAnalizarSin.setText(sb.toString());
+            txtSalida.setForeground(new Color(120, 0, 180));
+            txtSalida.setText("No se puede ejecutar: hay errores semanticos.\n\n" + sb);
+            return;
+        }
+
+        // 4. Detectar variables sin valor
+        Interprete interprete = new Interprete();
+        Map<String, String> sinValor;
+        try {
+            sinValor = interprete.detectarVariablesSinValor(ST);
+        } catch (Exception ex) {
+            txtSalida.setForeground(Color.RED);
+            txtSalida.setText("Error al detectar variables: " + ex.getMessage());
+            return;
+        }
+
+        // 5. Dialogo si hay variables sin valor
+        Map<String, Integer> valoresUsuario = null;
+        if (!sinValor.isEmpty()) {
+            DialogoValores dialogo = new DialogoValores(this, sinValor);
+            dialogo.setVisible(true);
+            valoresUsuario = dialogo.getResultado();
+            if (valoresUsuario == null) {
+                txtSalida.setForeground(new Color(150, 100, 0));
+                txtSalida.setText("Ejecucion cancelada por el usuario.");
+                return;
+            }
+        }
+
+        // 6. Ejecutar
+        try {
+            String resultado = interprete.ejecutar(ST, valoresUsuario);
+            txtSalida.setForeground(modoOscuro ? D_FG : new Color(30, 30, 30));
+            txtSalida.setText("-- Resultado de ejecucion --\n\n" + resultado);
+        } catch (Exception ex) {
+            txtSalida.setForeground(Color.RED);
+            txtSalida.setText("Error en ejecucion: " + ex.getMessage());
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Generacion de codigo intermedio
+    // -----------------------------------------------------------------------
+    private void generarCodigoIntermedio() {
+        String ST = txtResultado.getText();
+
+        // Verificar lexico y sintaxis primero
+        try {
+            String errorLexico = verificarLexico(ST);
+            if (errorLexico != null) {
+                txtCodigo.setForeground(new Color(200, 80, 0));
+                txtCodigo.setText("No se puede generar: errores lexicos.\n\n" + errorLexico);
+                return;
             }
         } catch (Exception ex) {
-            txtAnalizarSin.setForeground(Color.RED);
-            txtAnalizarSin.setText("Error al analizar: " + ex.getMessage());
+            txtCodigo.setForeground(Color.RED);
+            txtCodigo.setText("Error lexico: " + ex.getMessage());
             return;
         }
 
@@ -309,45 +384,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     + ", columna " + (err.right + 1)
                     + ". Token inesperado: \"" + err.value + "\""
                     : "Error SINTACTICO desconocido.";
-            txtAnalizarSin.setForeground(Color.RED);
-            txtAnalizarSin.setText(msg);
-            txtSalida.setForeground(Color.RED);
-            txtSalida.setText("No se puede ejecutar: hay errores sintacticos.\n\n" + msg);
+            txtCodigo.setForeground(Color.RED);
+            txtCodigo.setText("No se puede generar: errores sintacticos.\n\n" + msg);
             return;
         }
 
-        txtAnalizarSin.setForeground(new Color(25, 111, 61));
-        txtAnalizarSin.setText("Analisis sintactico correcto.");
-
-        Interprete interprete = new Interprete();
-        Map<String, String> sinValor;
+        // Generar codigo intermedio
         try {
-            sinValor = interprete.detectarVariablesSinValor(ST);
+            GeneradorCodigoIntermedio gen = new GeneradorCodigoIntermedio();
+            String codigo = gen.generar(ST);
+            txtCodigo.setForeground(modoOscuro ? D_FG : new Color(20, 40, 80));
+            txtCodigo.setText("--- Codigo Intermedio ---\n\n" + codigo);
         } catch (Exception ex) {
-            txtSalida.setForeground(Color.RED);
-            txtSalida.setText("Error al detectar variables: " + ex.getMessage());
-            return;
-        }
-
-        Map<String, Integer> valoresUsuario = null;
-        if (!sinValor.isEmpty()) {
-            DialogoValores dialogo = new DialogoValores(this, sinValor);
-            dialogo.setVisible(true);
-            valoresUsuario = dialogo.getResultado();
-            if (valoresUsuario == null) {
-                txtSalida.setForeground(new Color(150, 100, 0));
-                txtSalida.setText("Ejecucion cancelada por el usuario.");
-                return;
-            }
-        }
-
-        try {
-            String resultado = interprete.ejecutar(ST, valoresUsuario);
-            txtSalida.setForeground(modoOscuro ? D_FG : new Color(30, 30, 30));
-            txtSalida.setText("-- Resultado de ejecucion --\n\n" + resultado);
-        } catch (Exception ex) {
-            txtSalida.setForeground(Color.RED);
-            txtSalida.setText("Error en ejecucion: " + ex.getMessage());
+            txtCodigo.setForeground(Color.RED);
+            txtCodigo.setText("Error al generar codigo intermedio: " + ex.getMessage());
         }
     }
 
@@ -373,6 +423,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         txtSalida = new javax.swing.JTextArea();
         btnLimpiarSalida = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtCodigo = new javax.swing.JTextArea();
+        btnGenerarCodigo = new javax.swing.JButton();
+        btnLimpiarCodigo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -410,47 +465,45 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         txtAnalizarLex.setEditable(false);
         txtAnalizarLex.setBackground(L_LEX_OUT);
-        txtAnalizarLex.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        txtAnalizarLex.setFont(new Font("Monospaced", Font.PLAIN, 12));
         txtAnalizarLex.setColumns(20);
         txtAnalizarLex.setRows(5);
         jScrollPane2.setViewportView(txtAnalizarLex);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnArchivo, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                        .addComponent(btnAnalizarLex, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                        .addComponent(btnLimpiarLex, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                        .addComponent(btnTema, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                                .addGap(18, 18, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane1)
-                                        .addComponent(jScrollPane2))
-                                .addGap(18))
+        javax.swing.GroupLayout p1 = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(p1);
+        p1.setHorizontalGroup(p1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, p1.createSequentialGroup()
+                        .addGap(18)
+                        .addGroup(p1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnArchivo, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(btnTema, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(btnAnalizarLex, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(btnLimpiarLex, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addGroup(p1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1)
+                                .addComponent(jScrollPane2))
+                        .addGap(18))
         );
-        jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(12)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(btnArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(8)
-                                                .addComponent(btnTema, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(8)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(10)
-                                                .addComponent(btnAnalizarLex, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(8)
-                                                .addComponent(btnLimpiarLex, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12))
+        p1.setVerticalGroup(p1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p1.createSequentialGroup()
+                        .addGap(12)
+                        .addGroup(p1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(p1.createSequentialGroup()
+                                        .addComponent(btnArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(6)
+                                        .addComponent(btnTema, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8)
+                        .addGroup(p1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(p1.createSequentialGroup()
+                                        .addGap(10)
+                                        .addComponent(btnAnalizarLex, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8)
+                                        .addComponent(btnLimpiarLex, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12))
         );
 
         // --- jPanel2 ---
@@ -474,30 +527,28 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnLimpiarSin.setText("Limpiar");
         btnLimpiarSin.addActionListener(evt -> btnLimpiarSinActionPerformed(evt));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnAnalizarSin, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                        .addComponent(btnLimpiarSin, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                                .addGap(18, 18, Short.MAX_VALUE)
-                                .addComponent(jScrollPane3)
-                                .addGap(18))
+        javax.swing.GroupLayout p2 = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(p2);
+        p2.setHorizontalGroup(p2.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p2.createSequentialGroup()
+                        .addGap(18)
+                        .addGroup(p2.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnAnalizarSin, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(btnLimpiarSin, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3)
+                        .addGap(18))
         );
-        jPanel2Layout.setVerticalGroup(
-                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(12)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(btnAnalizarSin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(8)
-                                                .addComponent(btnLimpiarSin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12))
+        p2.setVerticalGroup(p2.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p2.createSequentialGroup()
+                        .addGap(12)
+                        .addGroup(p2.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(p2.createSequentialGroup()
+                                        .addComponent(btnAnalizarSin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8)
+                                        .addComponent(btnLimpiarSin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12))
         );
 
         // --- jPanel3 ---
@@ -517,25 +568,68 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnLimpiarSalida.setText("Limpiar");
         btnLimpiarSalida.addActionListener(evt -> txtSalida.setText(null));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(18)
-                                .addComponent(btnLimpiarSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, Short.MAX_VALUE)
-                                .addComponent(jScrollPane4)
-                                .addGap(18))
+        javax.swing.GroupLayout p3 = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(p3);
+        p3.setHorizontalGroup(p3.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p3.createSequentialGroup()
+                        .addGap(18)
+                        .addComponent(btnLimpiarSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4)
+                        .addGap(18))
         );
-        jPanel3Layout.setVerticalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(12)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                        .addComponent(btnLimpiarSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12))
+        p3.setVerticalGroup(p3.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p3.createSequentialGroup()
+                        .addGap(12)
+                        .addGroup(p3.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnLimpiarSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12))
+        );
+
+        // --- jPanel4: Codigo Intermedio ---
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Codigo Intermedio",
+                javax.swing.border.TitledBorder.CENTER,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new Font("Tahoma", Font.PLAIN, 18)));
+
+        txtCodigo.setEditable(false);
+        txtCodigo.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        txtCodigo.setBackground(L_COD_OUT);
+        txtCodigo.setColumns(20);
+        txtCodigo.setRows(8);
+        jScrollPane5.setViewportView(txtCodigo);
+
+        btnGenerarCodigo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        btnGenerarCodigo.setText("Generar");
+        btnGenerarCodigo.addActionListener(evt -> generarCodigoIntermedio());
+
+        btnLimpiarCodigo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        btnLimpiarCodigo.setText("Limpiar");
+        btnLimpiarCodigo.addActionListener(evt -> txtCodigo.setText(null));
+
+        javax.swing.GroupLayout p4 = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(p4);
+        p4.setHorizontalGroup(p4.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p4.createSequentialGroup()
+                        .addGap(18)
+                        .addGroup(p4.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnGenerarCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(btnLimpiarCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane5)
+                        .addGap(18))
+        );
+        p4.setVerticalGroup(p4.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p4.createSequentialGroup()
+                        .addGap(12)
+                        .addGroup(p4.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(p4.createSequentialGroup()
+                                        .addComponent(btnGenerarCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(8)
+                                        .addComponent(btnLimpiarCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12))
         );
 
         // --- Content pane ---
@@ -545,6 +639,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         panelCentral.add(jPanel1);
         panelCentral.add(jPanel2);
         panelCentral.add(jPanel3);
+        panelCentral.add(jPanel4);
         javax.swing.JScrollPane scrollPrincipal = new javax.swing.JScrollPane(panelCentral);
         scrollPrincipal.getVerticalScrollBar().setUnitIncrement(20);
         getContentPane().add(scrollPrincipal, java.awt.BorderLayout.CENTER);
@@ -621,6 +716,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea txtSalida;
     private javax.swing.JButton btnLimpiarSalida;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTextArea txtCodigo;
+    private javax.swing.JButton btnGenerarCodigo;
+    private javax.swing.JButton btnLimpiarCodigo;
     private javax.swing.JButton btnTema;
     private javax.swing.JPanel panelCentral;
+
 }

@@ -1,0 +1,9 @@
+iniciar_juego iniciar_bloque
+vida puntos fin
+mision abrir_mision puntos mayor 100 cerrar_mision iniciar_bloque
+mostrar ' ganaste ' fin
+finalizar_bloque
+sino iniciar_bloque
+mostrar ' perdiste ' fin
+finalizar_bloque
+finalizar_bloque
